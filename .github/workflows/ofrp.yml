@@ -1,0 +1,73 @@
+name: OrangeFox 10 Perseus automated build
+on:
+  workflow_dispatch:
+    inputs:
+      OrangeFox_Version:
+        description: "10 or 11 (9 is depreciated and not supported here"
+        required: true
+        default: "10"
+      root_sol:
+        description: "Custom magisk link, if needed"
+        required: false
+        default: ""
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Dependencies
+        run: |
+        sudo apt install python2 python-is-python2 git aria2 wget -y
+        cd ~
+        git clone https://gitlab.com/OrangeFox/misc/scripts
+        cd scripts
+        sudo bash setup/android_build_env.sh
+        sudo bash setup/install_android_sdk.sh
+      - name: Sync lastest OrangeFox source
+        run: |
+          mkdir ~/OrangeFox_sync
+          cd ~/OrangeFox_sync
+          git clone https://gitlab.com/OrangeFox/sync.git
+          cd ~/OrangeFox_sync/sync/
+          ./orangefox_sync.sh --branch ${{ github.event.inputs.OrangeFox_Version }} --path ~/fox
+      - name: Sync devicetree
+        run: |
+          cd ~/Fox
+          git clone https://github.com/mauronofrio/android_device_xiaomi_perseus.git device/xiaomi/perseus
+          git clone 
+      - name: Export buildvars
+        run: |
+          export "FOX_REPLACE_TOOLBOX_GETPROP"=1
+          export "FOX_USE_TAR_BINARY"=1
+          export "FOX_USE_SED_BINARY"=1
+          export "FOX_USE_BASH_SHELL"=1
+          export "FOX_ASH_IS_BASH"=1
+          export "OF_TWRP_COMPATIBILITY_MODE"=1
+          export "OF_DISABLE_MIUI_SPECIFIC_FEATURES"=1
+          export "FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER"=1
+          export "FOX_DELETE_AROMAFM"=1
+          export "OF_MAINTAINER"="Liz-zzz"
+          export "OF_SCREEN_H"=2340
+          export "OF_STATUS_INDENT_LEFT"=48
+          export "OF_STATUS_INDENT_RIGHT"=48
+          export "OF_ALLOW_DISABLE_NAVBAR"=0
+          export "OF_SKIP_MULTIUSER_FOLDERS_BACKUP"=1
+          export "FOX_USE_NANO_EDITOR"=1
+          export ALLOW_MISSING_DEPENDENCIES=true
+          export FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER=1
+          export LC_ALL="C"
+      - name: Actually build the recovery
+        run: |
+          cd ~/Fox
+          source build/envsetup.sh
+          lunch omni_perseus-eng
+          mka recoveryimage
+      - name: Artifacting recovery zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: ZIP
+          path: "~/Fox/out/target/product/perseus/*.zip"
+      - name: Artifacting recovery img
+        uses: actions/upload-artifact@v2
+        with:
+          name: IMG
+          path: "~/Fox/out/target/product/perseus/*.img"
