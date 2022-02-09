@@ -16,6 +16,7 @@ jobs:
     steps:
       - name: Dependencies
         run: |
+          alias exit='pwd > ~/.lwd && exit;'
           sudo apt install python2 python-is-python2 git aria2 wget -y
           cd ~
           git clone https://gitlab.com/OrangeFox/misc/scripts
