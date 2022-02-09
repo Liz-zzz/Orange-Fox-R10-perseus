@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       OrangeFox_Version:
-        description: "10 or 11 (9 is depreciated and not supported here"
+        description: "10.0 or 11.0 (9.0 is depreciated and not supported here"
         required: true
-        default: "10"
+        default: "10.0"
       root_sol:
         description: "Custom magisk link, if needed"
         required: false
