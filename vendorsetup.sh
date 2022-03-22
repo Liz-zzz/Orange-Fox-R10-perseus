@@ -23,9 +23,6 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE"]; then
     export "OF_DISABLE_MIUI_SPECIFIC_FEATURES"=1
     export "FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER"=1
     export "FOX_DELETE_AROMAFM"=1
-    ### TO BE DEFINED   ###
-    export "OF_FL_PATH1"= TBD
-    ###                 ###
     export "OF_MAINTAINER"="Liz-zzz"
     export "OF_SCREEN_H"=2340
     export "OF_STATUS_INDENT_LEFT"=48
@@ -33,6 +30,4 @@ if [ "$1" = "$FDEVICE" -o "$FOX_BUILD_DEVICE" = "$FDEVICE"]; then
     export "OF_ALLOW_DISABLE_NAVBAR"=0
     export "OF_SKIP_MULTIUSER_FOLDERS_BACKUP"=1
     export "FOX_USE_NANO_EDITOR"=1
-    ### TO BE DEFINED   ###
-    export "FOX_USE_SPECIFIC_MAGISK_ZIP"= TBD
-    ###                 ###
+fi
